@@ -2,6 +2,7 @@ class Song < ActiveRecord::Base
   attr_accessible :user_id, :song, :youtube_key, :rating, :name, :artist
 
   belongs_to :user
+  has_and_belongs_to_many :playlists
 
   has_attached_file :song, path: ':rails_root/public/:class/song/:filename', url: '/songs/song/:filename'
 
