@@ -11,14 +11,20 @@ class PlaylistsController < ApplicationController
   def create
     @playlist = current_user.playlists.build( params[:playlist] )
     if @playlist.save
-      render json:  "{ status: Success, message: Playlist id #{@playlist.id} has been created" 
+      render json:  { status: 'success', playlist: { id: @playlist.id, name: @playlist.name }} 
     else
-      render json:  "{ status: Failure, message: Failed to create the playlist: #{@playlist.errors.messages} }" 
+      render json:  { status: 'error', playlist: { id: @playlist.id, name: @playlist.name } message: @playlist.errors.messages} 
     end
 
   end
 
   def destroy
+    @playlist = Playlist.find( params[:id] )
+    if @playlist.delete
+      render json: { status: 'success', playlist: { id: @playlist.id, name: @playlist.name }}
+    else
+      render json: {status: 'error', playlist: { id: @playlist.id, name: @playlist.name }, message: @playlist.errors.messages}
+    end
   end
 
   def add_song(song)
