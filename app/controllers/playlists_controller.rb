@@ -23,11 +23,19 @@ class PlaylistsController < ApplicationController
     if @playlist.delete
       render json: { status: 'success', playlist: { id: @playlist.id, name: @playlist.name }}
     else
-      render json: {status: 'error', playlist: { id: @playlist.id, name: @playlist.name }, message: @playlist.errors.messages}
+      render json: {status: 'error', playlist: { id: @playlist.id, name: @playlist.name }, message: @playlist.errors.messages }
     end
   end
 
   def add_song(song)
+    @playlist = Playlist.find( params[:id] )
+    @playlist.songs << song
+    if @playlist.save
+      render json: { status: 'success', playlist: { id: @playlist.id, name: @playlist.name }, song: { id: song.id, name: song.name }}
+    else
+      render json: { status: 'error', playlist: { id: @playlist.id, name: @playlist.name }, message: @playlist.errors.messages }}
+    end
+    
   end
 
   def remove_song(song)
