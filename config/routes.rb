@@ -5,5 +5,5 @@ MasicServer::Application.routes.draw do
 
   resources :playlists
 
-  match '/playlists/add/:id/:song_id', to: 'playlists#add', via: :get
+  match '/playlists/add/:id/:song_id', :to => 'playlists#add', :via => :post, :as => :add_song
 end
