@@ -3,7 +3,13 @@ MasicServer::Application.routes.draw do
   root to: 'pages#home'
   resources :songs
 
-  resources :playlists
 
-  match '/playlists/add/:id/:song_id', :to => 'playlists#add', :via => :post, :as => :add_song
+  # Allows for uri's of the form '/playlists/:id/add_song'
+  resources :playlists do 
+    # Provides route helper add_song_playlist_path(@playlist)
+    member do
+      post :add_song
+    end
+  end
+
 end

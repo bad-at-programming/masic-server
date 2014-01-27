@@ -19,7 +19,12 @@ class PlaylistsController < ApplicationController
   end
 
   def destroy
-    @playlist = Playlist.find( params[:id] )
+    begin
+      @playlist = current_user.playlists.find( params[:id] )
+    rescue
+      render json: { status: 'error', message: "#{$!}" }
+    end
+
     if @playlist.delete
       render json: { status: 'success', playlist: { id: @playlist.id, name: @playlist.name }}
     else
@@ -29,7 +34,7 @@ class PlaylistsController < ApplicationController
 
 
   # Custom route of the form /playlists/add/:id/:song_id to add a song to the playlist
-  def add
+  def add_song
     @playlist = Playlist.find( params[:id] )
     @song = Song.find( params[:song_id] )
     if belongs_to_user?(current_user, @playlist, @song)
